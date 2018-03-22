@@ -3,6 +3,7 @@ import unittest
 
 from tests.test_base import TestBase
 from resource.users_base import *
+from front.pages.groups_page import GroupsPage
 
 
 class TestLoginPage(TestBase):
@@ -13,25 +14,40 @@ class TestLoginPage(TestBase):
         self.assertTrue(self.login_page.submit.is_enabled())
 
     def test2_sign_in_as_admin(self):
-        self.login_page.login = 'admin'
-        self.login_page.password = '1234'
+        self.login_page.login = first_admin.login
+        self.login_page.password = first_admin.password
         self.login_page.submit.click()
-        time.sleep(2)
+        time.sleep(1)
         self.assertEqual(self.driver.title, 'Caesar')
+        group_page = GroupsPage(self.driver)
+        self.assertEqual(group_page.group_location.text, first_admin.location)
+        group_page.user_photo.click()
+        self.assertEqual(group_page.user_full_name.text, first_admin.full_name)
+        self.assertEqual(group_page.user_role.text, 'ITA ' + first_admin.role)
 
     def test3_sign_in_as_coordinator(self):
-        self.login_page.login = 'dmytro'
-        self.login_page.password = '1234'
+        self.login_page.login = coordinator.login
+        self.login_page.password = coordinator.password
         self.login_page.submit.click()
-        time.sleep(2)
+        time.sleep(1)
         self.assertEqual(self.driver.title, 'Caesar')
+        group_page = GroupsPage(self.driver)
+        self.assertEqual(group_page.group_location.text, coordinator.location)
+        group_page.user_photo.click()
+        self.assertEqual(group_page.user_full_name.text, coordinator.full_name)
+        self.assertEqual(group_page.user_role.text, 'ITA ' + coordinator.role)
 
     def test4_sign_in_as_teacher(self):
-        self.login_page.login = 'sasha'
-        self.login_page.password = '1234'
+        self.login_page.login = teacher.login
+        self.login_page.password = teacher.password
         self.login_page.submit.click()
-        time.sleep(2)
+        time.sleep(1)
         self.assertEqual(self.driver.title, 'Caesar')
+        group_page = GroupsPage(self.driver)
+        self.assertEqual(group_page.group_location.text, teacher.location)
+        group_page.user_photo.click()
+        self.assertEqual(group_page.user_full_name.text, teacher.full_name)
+        self.assertEqual(group_page.user_role.text, 'ITA ' + teacher.role)
 
     def test5_length_password_equal_10(self):
         """
